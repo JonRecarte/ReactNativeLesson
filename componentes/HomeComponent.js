@@ -5,6 +5,9 @@ import { EXCURSIONES } from '../comun/excursiones';
 import { CABECERAS } from '../comun/cabeceras';
 import { ACTIVIDADES } from '../comun/actividades';
 import { StyleSheet } from 'react-native';
+import { baseUrl } from '../comun/comun';
+import { colorGaztaroaClaro } from '../comun/comun';
+import { colorGaztaroaOscuro } from '../comun/comun';
 
 const styles = StyleSheet.create({
     image: {
@@ -42,7 +45,7 @@ function RenderItem(props) {
             <Card containerStyle={styles.card} >
                 <View style={styles.imageContainer}>
                     <Card.Image
-                        source={require('./imagenes/40Años.png')}
+                        source={{uri:baseUrl + item.imagen}}
                         style={styles.image}
                     ></Card.Image>
                     <Text style={styles.title}>{item.nombre}</Text>

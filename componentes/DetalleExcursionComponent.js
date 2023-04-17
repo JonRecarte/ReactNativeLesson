@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Card, Icon } from '@rneui/themed';
 import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
+import { baseUrl } from '../comun/comun';
 
 const styles = StyleSheet.create({
     image: {
@@ -12,7 +13,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     title: {
-        color: 'chocolate',
+        color: 'white',
         padding: 10,
         fontSize: 20,
         position: 'absolute',
@@ -62,7 +63,7 @@ function RenderExcursion(props) {
             <Card containerStyle={styles.card} >
                 <View style={styles.imageContainer}>
                     <Card.Image
-                        source={require('./imagenes/40Años.png')}
+                        source={{uri:baseUrl + excursion.imagen}}
                         style={styles.image}
                     ></Card.Image>
                     <Text style={styles.title}>{excursion.nombre}</Text>
