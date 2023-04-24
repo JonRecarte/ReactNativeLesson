@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
 import Constants from 'expo-constants';
-import Calendario from './CalendarioComponent';
-import DetalleExcursion from './DetalleExcursionComponent';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './HomeComponent';
-import Contacto from './ContactoComponent.js';
-import QuienesSomos from './QuienesSomosComponent.js';
 
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { Icon } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
+import { Platform } from 'react-native';
 
 import { colorGaztaroaClaro, colorGaztaroaOscuro } from '../comun/comun';
 
+import Calendario from './CalendarioComponent';
+import Contacto from './ContactoComponent.js';
+import DetalleExcursion from './DetalleExcursionComponent';
+import Home from './HomeComponent';
+import QuienesSomos from './QuienesSomosComponent.js';
+
+import { connect } from 'react-redux';
+import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades } from '../redux/ActionCreators';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+
+const mapStateToProps = state => {
+  return {
+    excursiones: state.excursiones,
+    comentarios: state.comentarios,
+    cabeceras: state.cabeceras,
+    actividades: state.actividades
+  }
+}
+const mapDispatchToProps = dispatch => ({
+  fetchExcursiones: () => dispatch(fetchExcursiones()),
+  fetchComentarios: () => dispatch(fetchComentarios()),
+  fetchCabeceras: () => dispatch(fetchCabeceras()),
+  fetchActividades: () => dispatch(fetchActividades()),
+})
 
 function HomeNavegador({ navigation }) {
   return (
@@ -234,6 +253,14 @@ const styles = StyleSheet.create({
 });
 
 class Campobase extends Component {
+
+  componentDidMount() {
+    this.props.fetchExcursiones();
+    this.props.fetchComentarios();
+    this.props.fetchCabeceras();
+    this.props.fetchActividades();
+  }
+
   render() {
     return (
       <NavigationContainer>
@@ -247,4 +274,4 @@ class Campobase extends Component {
   }
 }
 
-export default Campobase;
+export default connect(mapStateToProps, mapDispatchToProps)(Campobase);
