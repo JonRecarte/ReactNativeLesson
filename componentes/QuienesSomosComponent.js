@@ -6,6 +6,8 @@ import { baseUrl } from '../comun/comun';
 
 import { connect } from 'react-redux';
 
+import { IndicadorActividad } from './IndicadorActividadComponent'
+
 const mapStateToProps = state => {
     return {
         actividades: state.actividades
@@ -45,23 +47,44 @@ class QuienesSomos extends Component {
             );
         };
 
-        return (
-            <ScrollView>
-                <Historia />
-                <SafeAreaView>
+        if (this.props.actividades.isLoading) {
+            return (
+                <ScrollView>
+                    <Historia />
                     <Card>
-                        <Card.Title>Actividades y recursos</Card.Title>
+                        <Card.Title>"Actividades y recursos"</Card.Title>
                         <Card.Divider />
-                        <FlatList
-                            scrollEnabled={false}
-                            data={this.props.actividades.actividades}
-                            renderItem={renderQuienesSomosItem}
-                            keyExtractor={item => item.id.toString()}
-                        />
-                    </Card >
-                </SafeAreaView>
-            </ScrollView>
-        );
+                        <IndicadorActividad />
+                    </Card>
+                </ScrollView>
+            );
+        } else if (this.props.actividades.errMess) {
+            return (
+                <View>
+                    <Text>{this.props.actividades.errMess}</Text>
+                </View>
+            );
+        } else {
+
+            return (
+                <ScrollView>
+                    <Historia />
+                    <SafeAreaView>
+                        <Card>
+                            <Card.Title>Actividades y recursos</Card.Title>
+                            <Card.Divider />
+                            <FlatList
+                                scrollEnabled={false}
+                                data={this.props.actividades.actividades}
+                                renderItem={renderQuienesSomosItem}
+                                keyExtractor={item => item.id.toString()}
+                            />
+                        </Card >
+                    </SafeAreaView>
+                </ScrollView>
+            );
+
+        }
     }
 }
 
