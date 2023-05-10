@@ -66,7 +66,7 @@ function RenderItem(props) {
             return (
                 <Card>
                     <Card.Divider />
-                    <Card.Image source={{ uri: baseUrl + item.imagen }}>
+                    <Card.Image source={{ uri: item.imagen }}>
                         <Card.Title style={styles.title}>{item.nombre}</Card.Title>
                     </Card.Image>
                     <Text style={{ margin: 20 }}>

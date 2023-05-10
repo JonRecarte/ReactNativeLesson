@@ -2,7 +2,8 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../comun/comun';
 
 export const fetchComentarios = () => (dispatch) => {
-    return fetch(baseUrl + 'comentarios')
+    return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'COMENTARIOS' + '.json')
+    //return fetch(baseUrl + 'comentarios')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -34,8 +35,8 @@ export const addComentarios = (comentarios) => ({
 export const fetchExcursiones = () => (dispatch) => {
 
     dispatch(excursionesLoading());
-
-    return fetch(baseUrl + 'excursiones')
+    return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'EXCURSIONES' + '.json')
+    //return fetch(baseUrl + 'excursiones')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -71,8 +72,8 @@ export const addExcursiones = (excursiones) => ({
 export const fetchCabeceras = () => (dispatch) => {
 
     dispatch(cabecerasLoading());
-
-    return fetch(baseUrl + 'cabeceras')
+    return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'CABECERAS' + '.json')
+    //return fetch(baseUrl + 'cabeceras')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -109,7 +110,9 @@ export const fetchActividades = () => (dispatch) => {
 
     dispatch(actividadesLoading());
 
-    return fetch(baseUrl + 'actividades')
+    
+    return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'ACTIVIDADES' + '.json')
+    //return fetch(baseUrl + 'actividades')
         .then(response => {
             if (response.ok) {
                 return response;
