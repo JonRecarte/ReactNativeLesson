@@ -17,6 +17,8 @@ import DetalleExcursion from './DetalleExcursionComponent';
 import Home from './HomeComponent';
 import QuienesSomos from './QuienesSomosComponent.js';
 import Login from './LoginComponent.js';
+import MapsComponent from './MapsComponent';
+import EventComponent from './EventComponent';
 
 import { connect } from 'react-redux';
 import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades } from '../redux/ActionCreators';
@@ -80,7 +82,7 @@ function CalendarioNavegador({ navigation }) {
         name="Calendario1" //En el guion esta puesto "Calendario"
         component={Calendario}
         options={{
-          title: 'Calendario Gaztaroa',
+          title: 'Excursiones Gaztaroa',
           headerLeft: () => (<Icon name="menu" size={28} color='white' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />),
         }}
       />
@@ -171,6 +173,56 @@ function LoginNavegador({ navigation }) {
   );
 }
 
+function MapsNavegador({ navigation }) {
+  return (
+    <Stack.Navigator
+      initialRouteName="¿Te has perdido?"
+      screenOptions={{
+        headerMode: 'screen',
+        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: colorGaztaroaOscuro },
+        headerTitleStyle: { color: '#fff' },
+        headerTitleAlign: 'center',
+        headerLeft: () => (<Icon name="menu" size={28} color='white' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />),
+      }}
+    >
+
+      <Stack.Screen
+        name="mapa"
+        component={MapsComponent}
+        options={{
+          title: '¿Te has perdido?',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function EventNavegador({ navigation }) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Eventos"
+      screenOptions={{
+        headerMode: 'screen',
+        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: colorGaztaroaOscuro },
+        headerTitleStyle: { color: '#fff' },
+        headerTitleAlign: 'center',
+        headerLeft: () => (<Icon name="menu" size={28} color='white' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />),
+      }}
+    >
+
+      <Stack.Screen
+        name="Etxea"
+        component={EventComponent}
+        options={{
+          title: 'Eventos',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
@@ -213,11 +265,12 @@ function DrawerNavegador() {
           )
         }}
       />
-      <Drawer.Screen name="Calendario" component={CalendarioNavegador}
+      <Drawer.Screen name="Excursiones" component={CalendarioNavegador}
         options={{
           drawerIcon: ({ tintColor }) => (
             <Icon
-              name='calendar'
+              // name='calendar'
+              name='search'
               type='font-awesome'
               size={24}
               color={tintColor}
@@ -249,11 +302,35 @@ function DrawerNavegador() {
           )
         }}
       />
+      <Drawer.Screen name="¿Te has perdido?" component={MapsNavegador}
+        options={{
+          drawerIcon: ({ tintColor }) => (
+            <Icon
+              name='map'
+              type='font-awesome'
+              size={24}
+              color={tintColor}
+            />
+          )
+        }}
+      />
       <Drawer.Screen name="Login" component={LoginNavegador}
         options={{
           drawerIcon: ({ tintColor }) => (
             <Icon
               name='sign-in'
+              type='font-awesome'
+              size={24}
+              color={tintColor}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen name="Eventos" component={EventNavegador}
+        options={{
+          drawerIcon: ({ tintColor }) => (
+            <Icon
+              name='bell'
               type='font-awesome'
               size={24}
               color={tintColor}
