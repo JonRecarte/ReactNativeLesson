@@ -63,7 +63,7 @@ const LoginForm = () => {
                 </View>
             )}
 
-            {/* Botones para seleccionar formulario */}
+            {/* Botones para seleccionar formulario */ }
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
                 <TouchableOpacity onPress={handleLoginPress}>
                     <Text style={{ color: isLoginVisible ? 'blue' : 'black', fontWeight: 'bold' }}>Iniciar sesión{'   '}</Text>
