@@ -7,11 +7,12 @@ import { baseUrl } from '../comun/comun';
 
 import { connect } from 'react-redux';
 
-import { postFavorito } from '../redux/ActionCreators';
+import { fetchComentarios, postFavorito } from '../redux/ActionCreators';
 
 import { colorGaztaroaClaro, colorGaztaroaOscuro } from '../comun/comun';
 
 import { postComentario } from '../redux/ActionCreators';
+import { useEffect } from 'react';
 
 const mapStateToProps = state => {
     return {
@@ -23,7 +24,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
-    postComentario: (excursionId, valoracion, autor, comentario) => dispatch(postComentario(excursionId, valoracion, autor, comentario))
+    postComentario: (excursionId, valoracion, autor, comentario) => dispatch(postComentario(excursionId, valoracion, autor, comentario)),
 })
 
 const styles = StyleSheet.create({
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
 function RenderComentario(props) {
 
     const comentarios = props.comentarios;
+
     return (
         <Card>
             <Card.Title>Comentarios</Card.Title>
@@ -122,7 +124,7 @@ class DetalleExcursion extends Component {
         this.state = {
             valoracion: 3,
             autor: '',
-            comentario: '',
+            comentario: 'a',
             showModal: false
         }
     }
@@ -139,6 +141,7 @@ class DetalleExcursion extends Component {
             dia: '',
             showModal: false
         });
+    
     }
 
     marcarFavorito(excursionId) {
@@ -150,6 +153,8 @@ class DetalleExcursion extends Component {
         this.props.postComentario(excursionId, valoracion, autor, comentario);
         this.toggleModal();
     }
+
+
 
     render() {
         const { excursionId } = this.props.route.params;
@@ -174,7 +179,7 @@ class DetalleExcursion extends Component {
                         <Rating
                             showRating
                             startingValue={3}
-                            onFinishRating={rating => {this.setState({ valoracion: rating })}}
+                            onFinishRating={rating => { this.setState({ valoracion: rating }) }}
                             style={{ paddingVertical: 10 }}
                         />
                         <Input
@@ -204,7 +209,9 @@ class DetalleExcursion extends Component {
                 </Modal>
 
                 <RenderComentario
-                    comentarios={this.props.comentarios.comentarios.filter((comentario) => comentario.excursionId === excursionId)}
+                    comentarios={Object.keys(this.props.comentarios.comentarios).filter((key) => this.props.comentarios.comentarios[key].excursionId === excursionId).map((i) => {
+                        return this.props.comentarios.comentarios[i]
+                    })}
                 />
             </ScrollView>
         );

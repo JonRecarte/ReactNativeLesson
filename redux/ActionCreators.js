@@ -3,7 +3,7 @@ import { baseUrl } from '../comun/comun';
 
 export const fetchComentarios = () => (dispatch) => {
     return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'COMENTARIOS' + '.json')
-    //return fetch(baseUrl + 'comentarios')
+        //return fetch(baseUrl + 'comentarios')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -18,8 +18,12 @@ export const fetchComentarios = () => (dispatch) => {
                 throw errmess;
             })
         .then(response => response.json())
-        .then(comentarios => dispatch(addComentarios(comentarios)))
-        .catch(error => dispatch(comentariosFailed(error.message)));
+        .then((comentarios) => {
+            dispatch(addComentarios(comentarios))
+        })
+        .catch((error) => {
+            dispatch(comentariosFailed(error.message))
+        } );
 };
 
 export const comentariosFailed = (errmess) => ({
@@ -36,7 +40,7 @@ export const fetchExcursiones = () => (dispatch) => {
 
     dispatch(excursionesLoading());
     return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'EXCURSIONES' + '.json')
-    //return fetch(baseUrl + 'excursiones')
+        //return fetch(baseUrl + 'excursiones')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -73,7 +77,7 @@ export const fetchCabeceras = () => (dispatch) => {
 
     dispatch(cabecerasLoading());
     return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'CABECERAS' + '.json')
-    //return fetch(baseUrl + 'cabeceras')
+        //return fetch(baseUrl + 'cabeceras')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -110,9 +114,8 @@ export const fetchActividades = () => (dispatch) => {
 
     dispatch(actividadesLoading());
 
-    
     return fetch('https://react-native-appgaztaroa-635e4-default-rtdb.europe-west1.firebasedatabase.app/' + 'ACTIVIDADES' + '.json')
-    //return fetch(baseUrl + 'actividades')
+        //return fetch(baseUrl + 'actividades')
         .then(response => {
             if (response.ok) {
                 return response;
@@ -145,16 +148,6 @@ export const addActividades = (actividades) => ({
     payload: actividades
 });
 
-export const postFavorito = (excursionId) => (dispatch) => {
-    setTimeout(() => {
-        dispatch(addFavorito(excursionId));
-    }, 2000);
-};
-export const addFavorito = (excursionId) => ({
-    type: ActionTypes.ADD_FAVORITO,
-    payload: excursionId
-});
-
 export const postComentario = (excursionId, valoracion, autor, comentario) => (dispatch) => {
     var dia = new Date();
     setTimeout(() => {
@@ -170,4 +163,24 @@ export const addComentario = (excursionId, valoracion, autor, comentario, dia) =
     comentario: comentario,
     dia: dia
 
+});
+
+export const insertComentario = (excursionId, valoracion, autor, comentario, dia) => ({
+
+    excursionId: excursionId,
+    valoracion: valoracion,
+    autor: autor,
+    comentario: comentario,
+    dia: dia
+
+});
+
+export const postFavorito = (excursionId) => (dispatch) => {
+    setTimeout(() => {
+        dispatch(addFavorito(excursionId));
+    }, 2000);
+};
+export const addFavorito = (excursionId) => ({
+    type: ActionTypes.ADD_FAVORITO,
+    payload: excursionId
 });
