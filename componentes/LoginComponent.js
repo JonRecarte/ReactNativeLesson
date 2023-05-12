@@ -1,30 +1,82 @@
-import React, { Component } from 'react';
-import { Text } from 'react-native';
-import { Card } from '@rneui/themed';
+import React, { Component, useState } from 'react';
 
-function RenderContacto() {
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-    return(
-        <Card>
-        <Card.Title>Información de contacto</Card.Title>
-        <Card.Divider />
-        <Text style={{ margin: 20 }}>
-            Kaixo Mendizale! {"\n"}{"\n"}
-            Si quieres participar en las salidas de montaña que organizamos o quieres hacerte soci@ de Gaztaroa, puedes contactar con nosotros a través de diferentes medios. Puedes llamarnos por teléfono los jueves de las semanas que hay salida (de 20:00 a 21:00). También puedes ponerte en contacto con nosotros escribiendo un correo electrónico, o utilizando la aplicación de esta página web. Y además puedes seguirnos en Facebook.{"\n"}{"\n"}
-            Para lo que quieras, estamos a tu disposición!{"\n"}{"\n"}
-            Tel: +34 948 277151{"\n"}{"\n"}
-            Email: gaztaroa@gaztaroa.com
-        </Text>
-    </Card >
+const LoginForm = () => {
+    const [isLoginVisible, setIsLoginVisible] = useState(true);
+
+    const handleLoginPress = () => {
+        setIsLoginVisible(true);
+    };
+
+    const handleRegisterPress = () => {
+        setIsLoginVisible(false);
+    };
+
+    return (
+        <View style={{ alignItems: 'center', marginTop: 50 }}>
+            {isLoginVisible ? (
+                /* Formulario de inicio de sesión */
+                <View style={{ width: '80%' }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>Inicio de sesión</Text>
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 20 }}
+                        placeholder='Correo electrónico'
+                        keyboardType='email-address'
+                    />
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 20 }}
+                        placeholder='Contraseña'
+                        secureTextEntry={true}
+                    />
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}
+                        onPress={() => console.log('Inicio de sesión')}
+                    >
+                        <Text style={{ color: 'white', textAlign: 'center' }}>Iniciar sesión</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                /* Formulario de registro */
+                <View style={{ width: '80%' }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>Registro</Text>
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 20 }}
+                        placeholder='Nombre de usuario'
+                    />
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 20 }}
+                        placeholder='Correo electrónico'
+                        keyboardType='email-address'
+                    />
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 20 }}
+                        placeholder='Contraseña'
+                        secureTextEntry={true}
+                    />
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'blue', padding: 10, borderRadius: 5 }}
+                        onPress={() => console.log('Registro')}
+                    >
+                        <Text style={{ color: 'white', textAlign: 'center' }}>Registrarse</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {/* Botones para seleccionar formulario */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <TouchableOpacity onPress={handleLoginPress}>
+                    <Text style={{ color: isLoginVisible ? 'blue' : 'black', fontWeight: 'bold' }}>Iniciar sesión{'   '}</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={handleRegisterPress}>
+                    <Text style={{ color: !isLoginVisible ? 'blue' : 'black', fontWeight: 'bold' }}>Registrarse</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
+};
 
-}
+export default LoginForm;
 
-class Contacto extends Component {
 
-    render() {
-        return(<RenderContacto/>);
-    }
-}
-
-export default Contacto;
