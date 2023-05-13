@@ -14,6 +14,9 @@ import { colorGaztaroaClaro, colorGaztaroaOscuro } from '../comun/comun';
 import { postComentario } from '../redux/ActionCreators';
 import { useEffect } from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
+
 const mapStateToProps = state => {
     return {
         excursiones: state.excursiones,
@@ -141,7 +144,7 @@ class DetalleExcursion extends Component {
             dia: '',
             showModal: false
         });
-    
+
     }
 
     marcarFavorito(excursionId) {
@@ -154,59 +157,97 @@ class DetalleExcursion extends Component {
         this.toggleModal();
     }
 
-
-
     render() {
         const { excursionId } = this.props.route.params;
+
+        // Verificar si el usuario está logeado
+        AsyncStorage.getItem('login').then((loginValue) => {
+            if (loginValue === 'true') {
+                this.setState({ isLoggedIn: true });
+            } else {
+                this.setState({ isLoggedIn: false });
+            }
+        });
+
+        // // Obtener el valor del correo electrónico almacenado en AsyncStorage
+        // AsyncStorage.getItem('email').then((emailValue) => {
+        //     if (emailValue) {
+        //         // Si el valor existe, establecerlo como valor predeterminado para el Input de autor
+        //         this.setState({ autor: emailValue });
+        //     }
+        // });
+
         return (
             <ScrollView>
                 <RenderExcursion
                     excursion={this.props.excursiones.excursiones[+excursionId]}
                     favorita={(this.props.favoritos.favoritos).some(el => el === excursionId)}
                     onPress={() => this.marcarFavorito(excursionId)}
-                    onPress2={() => this.toggleModal()}
+                    onPress2={() => {
+                        if (this.state.isLoggedIn) {
+                            this.toggleModal();
+                        } else {
+                            Alert.alert(
+                                'Acción no disponible',
+                                'Necesitas iniciar sesión para comentar',
+                                [
+                                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                ],
+                                { cancelable: false }
+                            );
+                        }
+                    }}
                     modal={this.state.showModal}
                 />
-                <Modal
-                    animationType={"slide"}
-                    transparent={false}
-                    visible={this.state.showModal}
-                    onDismiss={() => this.toggleModal}
-                    onRequestClose={() => this.toggleModal}
-                >
-                    <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center", marginTop: 50 }}>
-                        {/* <Text style={{ textAlign: 'center' }}>Rating {this.state.valoracion}/{5}</Text> */}
-                        <Rating
-                            showRating
-                            startingValue={3}
-                            onFinishRating={rating => { this.setState({ valoracion: rating }) }}
-                            style={{ paddingVertical: 10 }}
-                        />
-                        <Input
-                            placeholder="  Autor"
-                            leftIcon={{ type: 'font-awesome', name: 'user' }}
-                            onChangeText={value => this.setState({ autor: value })}
-                        />
-                        <Input
-                            placeholder="  Comentario"
-                            leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                            onChangeText={value => this.setState({ comentario: value })}
-                        />
-                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                            <Button
-                                color={colorGaztaroaOscuro}
-                                title="ENVIAR"
-                                onPress={() => { this.gestionarComentario(excursionId, this.state.valoracion, this.state.autor, this.state.comentario); this.resetForm(); }}
+                {this.state.isLoggedIn && (
+                    <Modal
+                        animationType={"slide"}
+                        transparent={false}
+                        visible={this.state.showModal}
+                        onDismiss={() => this.toggleModal}
+                        onRequestClose={() => this.toggleModal}
+                    >
+                        <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center", marginTop: 50 }}>
+                            {/* <Text style={{ textAlign: 'center' }}>Rating {this.state.valoracion}/{5}</Text> */}
+                            <Rating
+                                showRating
+                                startingValue={3}
+                                onFinishRating={rating => { this.setState({ valoracion: rating }) }}
+                                style={{ paddingVertical: 10 }}
                             />
-                            <View style={{ width: 10 }} />
-                            <Button
-                                color={colorGaztaroaClaro}
-                                title="CANCELAR"
-                                onPress={() => { this.toggleModal(); this.resetForm() }}
+                            <Input
+                                placeholder="  Autor"
+                                leftIcon={{ type: 'font-awesome', name: 'user' }}
+                                onChangeText={value => this.setState({ autor: value })}
                             />
+                            {/* Input de autor con el valor predeterminado establecido
+                            <Input
+                                placeholder="  Autor"
+                                leftIcon={{ type: 'font-awesome', name: 'user' }}
+                                onChangeText={value => this.setState({ autor: value })}
+                                value={this.state.autor} // Establecer el valor predeterminado
+                            /> */}
+                            <Input
+                                placeholder="  Comentario"
+                                leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                                onChangeText={value => this.setState({ comentario: value })}
+                            />
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button
+                                    color={colorGaztaroaOscuro}
+                                    title="ENVIAR"
+                                    onPress={() => { this.gestionarComentario(excursionId, this.state.valoracion, this.state.autor, this.state.comentario); this.resetForm(); }}
+                                />
+                                <View style={{ width: 10 }} />
+                                <Button
+                                    color={colorGaztaroaClaro}
+                                    title="CANCELAR"
+                                    onPress={() => { this.toggleModal(); this.resetForm() }}
+                                />
+                            </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
+                )}
 
                 <RenderComentario
                     comentarios={Object.keys(this.props.comentarios.comentarios).filter((key) => this.props.comentarios.comentarios[key].excursionId === excursionId).map((i) => {
@@ -217,5 +258,6 @@ class DetalleExcursion extends Component {
         );
     }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetalleExcursion);
