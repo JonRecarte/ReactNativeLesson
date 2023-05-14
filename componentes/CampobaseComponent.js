@@ -19,6 +19,7 @@ import QuienesSomos from './QuienesSomosComponent.js';
 import Login from './LoginComponent.js';
 import MapsComponent from './MapsComponent';
 import EventComponent from './EventComponent';
+import CameraComponent from './CameraComponent';
 
 import { connect } from 'react-redux';
 import { fetchExcursiones, fetchComentarios, fetchCabeceras, fetchActividades } from '../redux/ActionCreators';
@@ -211,12 +212,35 @@ function EventNavegador({ navigation }) {
         headerLeft: () => (<Icon name="menu" size={28} color='white' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />),
       }}
     >
-
       <Stack.Screen
         name="Etxea"
         component={EventComponent}
         options={{
           title: 'Eventos',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function CameraNavegador({ navigation }) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Camera"
+      screenOptions={{
+        headerMode: 'screen',
+        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: colorGaztaroaOscuro },
+        headerTitleStyle: { color: '#fff' },
+        headerTitleAlign: 'center',
+        headerLeft: () => (<Icon name="menu" size={28} color='white' onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />),
+      }}
+    >
+      <Stack.Screen
+        name="Etxea"
+        component={CameraComponent}
+        options={{
+          title: 'Camera',
         }}
       />
     </Stack.Navigator>
@@ -314,18 +338,6 @@ function DrawerNavegador() {
           )
         }}
       />
-      <Drawer.Screen name="Login" component={LoginNavegador}
-        options={{
-          drawerIcon: ({ tintColor }) => (
-            <Icon
-              name='sign-in'
-              type='font-awesome'
-              size={24}
-              color={tintColor}
-            />
-          )
-        }}
-      />
       <Drawer.Screen name="Eventos" component={EventNavegador}
         options={{
           drawerIcon: ({ tintColor }) => (
@@ -338,7 +350,30 @@ function DrawerNavegador() {
           )
         }}
       />
-
+      <Drawer.Screen name="Camera" component={CameraNavegador}
+        options={{
+          drawerIcon: ({ tintColor }) => (
+            <Icon
+              name='camera'
+              type='font-awesome'
+              size={24}
+              color={tintColor}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen name="Login" component={LoginNavegador}
+        options={{
+          drawerIcon: ({ tintColor }) => (
+            <Icon
+              name='sign-in'
+              type='font-awesome'
+              size={24}
+              color={tintColor}
+            />
+          )
+        }}
+      />
 
     </Drawer.Navigator>
   );
