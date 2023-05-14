@@ -165,22 +165,12 @@ export const addComentario = (excursionId, valoracion, autor, comentario, dia) =
 
 });
 
-export const insertComentario = (excursionId, valoracion, autor, comentario, dia) => ({
-
-    excursionId: excursionId,
-    valoracion: valoracion,
-    autor: autor,
-    comentario: comentario,
-    dia: dia
-
-});
-
-export const postFavorito = (excursionId) => (dispatch) => {
-    setTimeout(() => {
-        dispatch(addFavorito(excursionId));
-    }, 2000);
-};
-export const addFavorito = (excursionId) => ({
-    type: ActionTypes.ADD_FAVORITO,
-    payload: excursionId
-});
+// export const postFavorito = (excursionId) => (dispatch) => {
+//     setTimeout(() => {
+//         dispatch(addFavorito(excursionId));
+//     }, 2000);
+// };
+// export const addFavorito = (excursionId) => ({
+//     type: ActionTypes.ADD_FAVORITO,
+//     payload: excursionId
+// });

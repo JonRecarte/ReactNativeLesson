@@ -1,18 +1,21 @@
-import React, { Component, useState } from 'react';
+
+
+// ----- COMENTARIOS: CUANDO FAVORITOS ESTA COMO REDUX + CORREO ELECTRONICO COMO PREDETERMINADO EN EL FORMULARIO DE COMENTARIOS ----- \\
+
+
+import React, { Component, useState, useEffect } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, Button } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Card, Icon, Input } from '@rneui/themed';
 import { Rating, AirbnbRating } from 'react-native-ratings';
-import { baseUrl } from '../comun/comun';
 
 import { connect } from 'react-redux';
 
-import { fetchComentarios, postFavorito } from '../redux/ActionCreators';
+//import { fetchComentarios, postFavorito } from '../redux/ActionCreators';
 
 import { colorGaztaroaClaro, colorGaztaroaOscuro } from '../comun/comun';
 
 import { postComentario } from '../redux/ActionCreators';
-import { useEffect } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
@@ -21,12 +24,12 @@ const mapStateToProps = state => {
     return {
         excursiones: state.excursiones,
         comentarios: state.comentarios,
-        favoritos: state.favoritos
+        //favoritos: state.favoritos
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
+    //postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
     postComentario: (excursionId, valoracion, autor, comentario) => dispatch(postComentario(excursionId, valoracion, autor, comentario)),
 })
 
@@ -78,12 +81,39 @@ function RenderComentario(props) {
     );
 }
 
-
 function RenderExcursion(props) {
 
     const excursion = props.excursion;
 
     const modal = props.modal;
+
+    const [favoritos, setFavoritos] = useState([]);
+    const [isFavorito, setIsFavorito] = useState(false);
+
+    useEffect(() => {
+        async function loadFavoritos() {
+            const favoritos = await AsyncStorage.getItem('favoritos');
+            const miArray = JSON.parse(favoritos) || [];
+            console.log(miArray)
+            setFavoritos(miArray);
+            setIsFavorito(miArray.includes(excursion.id));
+        }
+        loadFavoritos();
+    }, [excursion, setFavoritos]);
+
+    const handleFavoritoClick = () => {
+        if (isFavorito) {
+            const newFavoritos = favoritos.filter((id) => id !== excursion.id);
+            AsyncStorage.setItem('favoritos', JSON.stringify(newFavoritos));
+            setFavoritos(newFavoritos);
+            setIsFavorito(false);
+            Alert.alert('Eliminada de favoritos', 'Se ha eliminado esta excursión de tus favoritos');
+        } else {
+            Alert.alert('Añadida a favoritos', 'Se ha añadido esta excursión a tus favoritos');
+            AsyncStorage.setItem('favoritos', JSON.stringify([...favoritos, excursion.id]));
+            setIsFavorito(true);
+        }
+    };
 
     if (excursion != null) {
         return (
@@ -98,10 +128,12 @@ function RenderExcursion(props) {
                     <Icon
                         raised
                         reverse
-                        name={props.favorita ? 'heart' : 'heart-o'}
+                        name={isFavorito ? 'heart' : 'heart-o'}
+                        //name={props.favorita ? 'heart' : 'heart-o'}
                         type='font-awesome'
                         color='#f50'
-                        onPress={() => props.favorita ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
+                        onPress={handleFavoritoClick}
+                    //onPress={() => props.favorita ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
                     />
                     <Icon
                         raised
@@ -144,12 +176,19 @@ class DetalleExcursion extends Component {
             dia: '',
             showModal: false
         });
-
     }
 
-    marcarFavorito(excursionId) {
-        this.props.postFavorito(excursionId);
-    }
+    // marcarFavorito(excursionId) {
+    //     this.props.postFavorito(excursionId);
+    //     Alert.alert(
+    //         'Excursión añadida como favorita',
+    //         '',
+    //         [
+    //             { text: 'OK', onPress: () => console.log('OK Pressed') },
+    //         ],
+    //         { cancelable: false }
+    //     );
+    // }
 
     gestionarComentario(excursionId, valoracion, autor, comentario) {
         console.log(JSON.stringify(this.state));
@@ -181,8 +220,8 @@ class DetalleExcursion extends Component {
             <ScrollView>
                 <RenderExcursion
                     excursion={this.props.excursiones.excursiones[+excursionId]}
-                    favorita={(this.props.favoritos.favoritos).some(el => el === excursionId)}
-                    onPress={() => this.marcarFavorito(excursionId)}
+                    //favorita={(this.props.favoritos.favoritos).some(el => el === excursionId)}
+                    //onPress={() => this.marcarFavorito(excursionId)}
                     onPress2={() => {
                         if (this.state.isLoggedIn) {
                             this.toggleModal();
@@ -258,6 +297,5 @@ class DetalleExcursion extends Component {
         );
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetalleExcursion);
