@@ -25,6 +25,7 @@ function RenderContacto() {
                 Tel: +34 948 277151{"\n"}{"\n"}
                 Email: gaztaroa@gaztaroa.com
             </Text>
+            
             <Button
                 title="Enviar correo electrónico"
                 onPress={() => enviarCorreo()}
