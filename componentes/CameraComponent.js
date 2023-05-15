@@ -59,7 +59,7 @@ export default function CameraComponent() {
     } else if (hasMediaLibraryPermission === false) {
         return <Text>Se requiere el permiso de la biblioteca de medios para guardar en la galería.</Text>;
     } else {
-        console.log('dd');
+        console.log('Camera activa');
     }
 
     return (

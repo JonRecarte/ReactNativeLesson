@@ -241,6 +241,7 @@ function CameraNavegador({ navigation }) {
         component={CameraComponent}
         options={{
           title: 'Camera',
+          unmountOnBlur: true,
         }}
       />
     </Stack.Navigator>
@@ -352,6 +353,7 @@ function DrawerNavegador() {
       />
       <Drawer.Screen name="Camera" component={CameraNavegador}
         options={{
+          unmountOnBlur: true,
           drawerIcon: ({ tintColor }) => (
             <Icon
               name='camera'
