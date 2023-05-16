@@ -83,12 +83,11 @@ export default function CameraComponent() {
             >
                 <View style={styles.cameraButtons}>
                     <TouchableOpacity onPress={handleFlipCamera}>
-                        <Text style={styles.cameraButtonText}>Voltear</Text>
+                        <Text style={styles.cameraButtonText}>Girar{'   '}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleTakePhoto}>
                         <Text style={styles.cameraButtonText}>Tomar Foto</Text>
                     </TouchableOpacity>
-
                 </View>
             </Camera>
         </View>
